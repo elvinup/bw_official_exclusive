@@ -221,14 +221,15 @@
 </head>
 <body>
     <div id="app">
-        <!-- Hidden audio element -->
-        <audio ref="akonAudio" src="akon-na-na-na.mp3" preload="auto"></audio>
+        <!-- Hidden audio elements -->
+        <audio ref="akonAudio" src="music/akon_na_na_na_edit.m4a" preload="auto"></audio>
+        <audio ref="drakeAudio" src="music/drake_best_i_ever_had.m4a" preload="auto"></audio>
 
         <!-- Section 1: The Wrong Equation -->
         <div class="section section-1">
             <div class="equation-container" @click="revealDrake">
                 <div class="equation">
-                    Ani-tta = <span :class="{ 'crossed-out': drakeDisapproving }">Ani-me</span>?
+                    Ani-tta = <span :class="{ 'crossed-out': drakeDisapproving }">Ani-me</span>?<span v-if="drakeDisapproving">🙅🏽‍♀️</span>
                 </div>
                 <img
                     v-if="drakeDisapproving"
@@ -246,7 +247,7 @@
         <div class="section section-2">
             <div class="approved-container" @click="revealApproving">
                 <div class="equation-approved">
-                    Ani-tta = Ani-mine ✓
+                    Ani-tta = Ani-mine<span v-if="drakeApproving"> ✓ 🥰</span>
                 </div>
                 <img
                     v-if="drakeApproving"
@@ -254,6 +255,9 @@
                     alt="Drake Approving"
                     class="drake-meme drake-approve"
                 />
+            </div>
+            <div class="scroll-indicator">
+                ↓ Scroll Down ↓
             </div>
         </div>
 
@@ -276,28 +280,42 @@
                 return {
                     drakeDisapproving: false,
                     drakeApproving: false,
-                    facetimeLink: 'FACETIME_LINK_HERE' // Replace with actual FaceTime link
+                    facetimeLink: 'https://facetime.apple.com/join#v=1&p=gJtsdgVeEfGM7pbSzD3haw&k=1MzjaKk-gZyJTLIaRW92TFe5xhLA423rRzzufBjzrKU' 
                 }
             },
             methods: {
                 revealDrake() {
                     this.drakeDisapproving = true;
+                    // Stop Drake audio if playing
+                    const drakeAudio = this.$refs.drakeAudio;
+                    if (drakeAudio) {
+                        drakeAudio.pause();
+                        drakeAudio.currentTime = 0;
+                    }
                     // Play Akon "na na na" clip
-                    const audio = this.$refs.akonAudio;
-                    if (audio) {
-                        audio.currentTime = 0; // Reset to start
-                        audio.play().catch(err => console.log('Audio play failed:', err));
+                    const akonAudio = this.$refs.akonAudio;
+                    if (akonAudio) {
+                        akonAudio.currentTime = 0; // Reset to start
+                        akonAudio.play().catch(err => console.log('Audio play failed:', err));
                     }
                 },
                 revealApproving() {
                     this.drakeApproving = true;
+                    // Stop Akon audio if playing
+                    const akonAudio = this.$refs.akonAudio;
+                    if (akonAudio) {
+                        akonAudio.pause();
+                        akonAudio.currentTime = 0;
+                    }
+                    // Play Drake "Best I Ever Had" clip
+                    const drakeAudio = this.$refs.drakeAudio;
+                    if (drakeAudio) {
+                        drakeAudio.currentTime = 0; // Reset to start
+                        drakeAudio.play().catch(err => console.log('Audio play failed:', err));
+                    }
                 },
                 claimYourManz() {
-                    if (this.facetimeLink !== 'FACETIME_LINK_HERE') {
-                        window.location.href = this.facetimeLink;
-                    } else {
-                        alert('FaceTime link coming soon! 💕');
-                    }
+                    window.location.href = this.facetimeLink;
                 }
             }
         }).mount('#app');
