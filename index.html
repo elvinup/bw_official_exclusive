@@ -4,7 +4,8 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Making It Official 💕</title>
-    <script src="https://unpkg.com/vue@3/dist/vue.global.js"></script>
+    <link rel="preconnect" href="https://unpkg.com">
+    <script src="https://unpkg.com/vue@3/dist/vue.global.prod.js"></script>
     <style>
         * {
             margin: 0;
@@ -198,9 +199,13 @@
             display: none;
         }
 
+        .no-wrap {
+            white-space: nowrap;
+        }
+
         @media (max-width: 768px) {
             .equation, .equation-approved {
-                font-size: 3rem;
+                font-size: 2.5rem;
             }
 
             .drake-meme {
@@ -229,11 +234,11 @@
         <div class="section section-1">
             <div class="equation-container" @click="revealDrake">
                 <div class="equation">
-                    Ani-tta = <span :class="{ 'crossed-out': drakeDisapproving }">Ani-me</span>?<span v-if="drakeDisapproving">🙅🏽‍♀️</span>
+                    <span class="no-wrap">Ani-tta</span> = <span class="no-wrap" :class="{ 'crossed-out': drakeDisapproving }">Ani-me</span>?<span v-if="drakeDisapproving">🙅🏽‍♀️</span>
                 </div>
                 <img
                     v-if="drakeDisapproving"
-                    src="https://i.imgflip.com/ajmgaz.jpg"
+                    src="images/drake-disapprove.jpg"
                     alt="Drake Disapproving"
                     class="drake-meme drake-disapprove"
                 />
@@ -247,11 +252,11 @@
         <div class="section section-2">
             <div class="approved-container" @click="revealApproving">
                 <div class="equation-approved">
-                    Ani-tta = Ani-mine<span v-if="drakeApproving"> ✓ 🥰</span>
+                    <span class="no-wrap">Ani-tta</span> = <span class="no-wrap">Ani-mine</span><span v-if="drakeApproving"> ✓ 🥰</span>
                 </div>
                 <img
                     v-if="drakeApproving"
-                    src="https://i.imgur.com/PwxHfBb.png"
+                    src="images/drake-approve.png"
                     alt="Drake Approving"
                     class="drake-meme drake-approve"
                 />
