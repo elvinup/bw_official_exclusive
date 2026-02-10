@@ -188,13 +188,42 @@
             font-size: 1.2rem;
             animation: bounce 2s infinite;
             text-align: center;
+            z-index: 100;
+            width: 90%;
+            max-width: 400px;
         }
 
         .countdown {
-            font-size: 2rem;
+            font-size: 3rem;
             font-weight: bold;
             color: #fee140;
             text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.5);
+            animation: none;
+        }
+
+        .volume-notice {
+            position: absolute;
+            top: 2rem;
+            left: 50%;
+            transform: translateX(-50%);
+            color: white;
+            font-size: 1.3rem;
+            font-weight: bold;
+            text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.5);
+            background: rgba(0, 0, 0, 0.3);
+            padding: 1rem 2rem;
+            border-radius: 20px;
+            z-index: 100;
+            animation: pulse 2s ease-in-out infinite;
+        }
+
+        @keyframes pulse {
+            0%, 100% {
+                opacity: 1;
+            }
+            50% {
+                opacity: 0.7;
+            }
         }
 
         @keyframes bounce {
@@ -235,6 +264,35 @@
             .equation-container, .approved-container {
                 gap: 1.5rem;
             }
+
+            .scroll-indicator {
+                bottom: 1.5rem;
+                font-size: 1rem;
+            }
+
+            .countdown {
+                font-size: 2.5rem;
+            }
+        }
+
+        @media (max-width: 480px) {
+            .equation, .equation-approved {
+                font-size: 2rem;
+            }
+
+            .countdown {
+                font-size: 2rem;
+            }
+
+            .scroll-indicator {
+                bottom: 1rem;
+            }
+
+            .volume-notice {
+                font-size: 1rem;
+                padding: 0.8rem 1.5rem;
+                top: 1rem;
+            }
         }
     </style>
 </head>
@@ -246,6 +304,9 @@
 
         <!-- Section 1: The Wrong Equation -->
         <div class="section section-1">
+            <div class="volume-notice">
+                🔊 Volume ON! 🔊
+            </div>
             <div class="equation-container" @click="revealDrake">
                 <div class="equation">
                     <span class="no-wrap">Ani-tta</span> = <span class="no-wrap" :class="{ 'crossed-out': drakeDisapproving }">Ani-me</span>?<span v-if="drakeDisapproving">🙅🏽‍♀️</span>
@@ -382,7 +443,7 @@
                     }
                 },
                 claimYourManz() {
-                    window.location.href = this.facetimeLink;
+                    window.open(this.facetimeLink, '_blank');
                 }
             }
         }).mount('#app');
