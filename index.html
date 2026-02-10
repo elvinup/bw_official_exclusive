@@ -18,6 +18,12 @@
             background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
             min-height: 100vh;
             overflow-x: hidden;
+            overflow-y: hidden;
+            scroll-behavior: smooth;
+        }
+
+        body.allow-scroll {
+            overflow-y: auto;
         }
 
         #app {
@@ -181,6 +187,14 @@
             color: white;
             font-size: 1.2rem;
             animation: bounce 2s infinite;
+            text-align: center;
+        }
+
+        .countdown {
+            font-size: 2rem;
+            font-weight: bold;
+            color: #fee140;
+            text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.5);
         }
 
         @keyframes bounce {
@@ -244,7 +258,8 @@
                 />
             </div>
             <div class="scroll-indicator">
-                ↓ Scroll Down ↓
+                <div v-if="section1Timer > 0" class="countdown">{{ section1Timer }}s</div>
+                <div v-else>↓ Click to continue ↓</div>
             </div>
         </div>
 
@@ -262,7 +277,8 @@
                 />
             </div>
             <div class="scroll-indicator">
-                ↓ Scroll Down ↓
+                <div v-if="section2Timer > 0" class="countdown">{{ section2Timer }}s</div>
+                <div v-else>↓ Click to continue ↓</div>
             </div>
         </div>
 
@@ -272,7 +288,7 @@
                 So what are you waiting for?
             </h2>
             <button class="claim-button" @click="claimYourManz">
-                Claim Your Manz
+                Claim Yo Manz
             </button>
         </div>
     </div>
@@ -285,11 +301,15 @@
                 return {
                     drakeDisapproving: false,
                     drakeApproving: false,
-                    facetimeLink: 'https://facetime.apple.com/join#v=1&p=gJtsdgVeEfGM7pbSzD3haw&k=1MzjaKk-gZyJTLIaRW92TFe5xhLA423rRzzufBjzrKU' 
+                    section1Timer: 0,
+                    section2Timer: 0,
+                    facetimeLink: 'https://facetime.apple.com/join#v=1&p=gJtsdgVeEfGM7pbSzD3haw&k=1MzjaKk-gZyJTLIaRW92TFe5xhLA423rRzzufBjzrKU'
                 }
             },
             methods: {
                 revealDrake() {
+                    if (this.section1Timer > 0) return; // Prevent multiple clicks
+
                     this.drakeDisapproving = true;
                     // Stop Drake audio if playing
                     const drakeAudio = this.$refs.drakeAudio;
@@ -303,8 +323,13 @@
                         akonAudio.currentTime = 0; // Reset to start
                         akonAudio.play().catch(err => console.log('Audio play failed:', err));
                     }
+
+                    // Start 10 second countdown
+                    this.startCountdown(1);
                 },
                 revealApproving() {
+                    if (this.section2Timer > 0) return; // Prevent multiple clicks
+
                     this.drakeApproving = true;
                     // Stop Akon audio if playing
                     const akonAudio = this.$refs.akonAudio;
@@ -317,6 +342,43 @@
                     if (drakeAudio) {
                         drakeAudio.currentTime = 0; // Reset to start
                         drakeAudio.play().catch(err => console.log('Audio play failed:', err));
+                    }
+
+                    // Start 10 second countdown
+                    this.startCountdown(2);
+                },
+                startCountdown(section) {
+                    const timerKey = `section${section}Timer`;
+                    this[timerKey] = 15;
+
+                    const interval = setInterval(() => {
+                        this[timerKey]--;
+
+                        if (this[timerKey] <= 0) {
+                            clearInterval(interval);
+                            this.scrollToNextSection(section);
+                        }
+                    }, 1000);
+                },
+                scrollToNextSection(section) {
+                    // Enable scrolling temporarily
+                    document.body.classList.add('allow-scroll');
+
+                    // Get all sections
+                    const sections = document.querySelectorAll('.section');
+
+                    if (section < sections.length) {
+                        sections[section].scrollIntoView({ behavior: 'smooth' });
+
+                        // If this is the last section, keep scrolling enabled
+                        if (section >= sections.length - 1) {
+                            return;
+                        }
+
+                        // Re-lock scrolling after animation completes
+                        setTimeout(() => {
+                            document.body.classList.remove('allow-scroll');
+                        }, 1000);
                     }
                 },
                 claimYourManz() {
