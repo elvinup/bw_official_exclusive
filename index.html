@@ -180,10 +180,7 @@
         }
 
         .scroll-indicator {
-            position: absolute;
-            bottom: 2rem;
-            left: 50%;
-            transform: translateX(-50%);
+            margin-top: 3rem;
             color: white;
             font-size: 1.2rem;
             animation: bounce 2s infinite;
@@ -266,7 +263,7 @@
             }
 
             .scroll-indicator {
-                bottom: 1.5rem;
+                margin-top: 2rem;
                 font-size: 1rem;
             }
 
@@ -285,7 +282,7 @@
             }
 
             .scroll-indicator {
-                bottom: 1rem;
+                margin-top: 1.5rem;
             }
 
             .volume-notice {
@@ -320,7 +317,7 @@
             </div>
             <div class="scroll-indicator">
                 <div v-if="section1Timer > 0" class="countdown">{{ section1Timer }}s</div>
-                <div v-else>↓ Click to continue ↓</div>
+                <div v-else>↑ Click to continue ↑</div>
             </div>
         </div>
 
@@ -339,7 +336,7 @@
             </div>
             <div class="scroll-indicator">
                 <div v-if="section2Timer > 0" class="countdown">{{ section2Timer }}s</div>
-                <div v-else>↓ Click to continue ↓</div>
+                <div v-else>↑ Click to continue ↑</div>
             </div>
         </div>
 
